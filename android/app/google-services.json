@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685066245034",
+    "project_id": "app-kriptografi",
+    "storage_bucket": "app-kriptografi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685066245034:android:66b05886c1c029b4d311d3",
+        "android_client_info": {
+          "package_name": "com.example.sistem_kriptografi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDBYCzViX-jvvOFfo4Ktcq-EWSiw_Mx6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
