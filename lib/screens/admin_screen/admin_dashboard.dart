@@ -154,7 +154,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
-      final filePath = result.files.first.path;
+
       final fileName = result.files.first.name;
 
       try {

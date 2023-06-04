@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sistem_kriptografi/models/image_decrypt_model.dart';
 import 'package:sistem_kriptografi/models/image_encrypt_model.dart';
 
@@ -47,5 +48,35 @@ class FirestoreMethod {
       res = err.toString();
     }
     return res;
+  }
+
+  //delete encrypt image firestore
+  Future<void> deleteEncryptImage(String imageUrl, String imageid) async {
+    final CollectionReference historyRef =
+        _firestore.collection('images_encrypt');
+
+    try {
+      await historyRef.doc(imageid).delete();
+
+      Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
+      ref.delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //delete decrypt image firestore
+  Future<void> deleteDecryptImage(String imageUrl, String imageid) async {
+    final CollectionReference historyRef =
+        _firestore.collection('images_decrypt');
+
+    try {
+      await historyRef.doc(imageid).delete();
+
+      Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
+      ref.delete();
+    } catch (e) {
+      print(e);
+    }
   }
 }

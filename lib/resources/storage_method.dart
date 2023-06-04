@@ -36,7 +36,6 @@ class StorageMethod {
     // Mendapatkan nama file dari URL
 
     if (imageUrl.isNotEmpty) {
-      final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
       // Mendownload file ke lokasi lokal
       final downloadsDirectory = '${dir!.path}/${imageName}';
 

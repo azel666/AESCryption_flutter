@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sistem_kriptografi/resources/firestore_method.dart';
 import 'package:sistem_kriptografi/resources/storage_method.dart';
 
 class AdminDecryptDetail extends StatefulWidget {
@@ -47,7 +48,9 @@ class _AdminDecryptDetailState extends State<AdminDecryptDetail> {
                       content:
                           Text('Downloaded ${widget.detail['imageName']}')));
                 } else if (value == 'delete') {
-                  // logout();
+                  await FirestoreMethod().deleteDecryptImage(
+                      widget.detail['imageUrl'], widget.detail['imageid']);
+                  Get.back();
                 }
               },
 
