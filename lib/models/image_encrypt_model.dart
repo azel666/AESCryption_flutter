@@ -4,6 +4,7 @@ class ImageEncryptModel {
   String imageid;
   String imageName;
   String imageUrl;
+  String randomName;
   DateTime createdAt;
   String userid;
 
@@ -11,6 +12,7 @@ class ImageEncryptModel {
       {required this.imageid,
       required this.imageName,
       required this.imageUrl,
+      required this.randomName,
       required this.createdAt,
       required this.userid});
 
@@ -21,6 +23,7 @@ class ImageEncryptModel {
       imageid: snapshot['imageid'],
       imageName: snapshot['imageName'],
       imageUrl: snapshot['imageUrl'],
+      randomName: snapshot['randomName'],
       createdAt: snapshot['createdAt'],
       userid: snapshot['userid'],
     );
@@ -30,6 +33,7 @@ class ImageEncryptModel {
         "imageid": imageid,
         "imageName": imageName,
         "imageUrl": imageUrl,
+        "randomName": randomName,
         "createdAt": createdAt,
         "userid": userid,
       };

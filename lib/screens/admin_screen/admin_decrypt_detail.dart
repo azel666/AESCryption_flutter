@@ -3,17 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_kriptografi/resources/storage_method.dart';
-import 'package:sistem_kriptografi/services/encrypt.dart';
 
-class AdminEncryptDetail extends StatefulWidget {
+class AdminDecryptDetail extends StatefulWidget {
   final detail;
-  const AdminEncryptDetail({required this.detail, super.key});
+  const AdminDecryptDetail({required this.detail, super.key});
 
   @override
-  State<AdminEncryptDetail> createState() => _AdminEncryptDetailState();
+  State<AdminDecryptDetail> createState() => _AdminDecryptDetailState();
 }
 
-class _AdminEncryptDetailState extends State<AdminEncryptDetail> {
+class _AdminDecryptDetailState extends State<AdminDecryptDetail> {
   var appBarHeight = AppBar().preferredSize.height;
 
   @override
@@ -24,7 +23,7 @@ class _AdminEncryptDetailState extends State<AdminEncryptDetail> {
           // backgroundColor: "#2E4053".toColor(),
           backgroundColor: Colors.grey,
           title: const Text(
-            'Image Encrypt',
+            'Image Decrypt',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -42,8 +41,8 @@ class _AdminEncryptDetailState extends State<AdminEncryptDetail> {
               ),
               onSelected: (value) async {
                 if (value == 'download') {
-                  await StorageMethod().downloadEncryptImage(
-                      widget.detail['imageUrl'], widget.detail['randomName']);
+                  await StorageMethod().downloadDecryptImage(
+                      widget.detail['imageUrl'], widget.detail['imageName']);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
                           Text('Downloaded ${widget.detail['imageName']}')));
@@ -120,19 +119,10 @@ class _AdminEncryptDetailState extends State<AdminEncryptDetail> {
                     height: 300,
                     decoration: BoxDecoration(
                       color: Colors.grey,
-
-                      // image: DecorationImage(
-                      //     fit: BoxFit.cover,
-                      //     image: Image.network(
-                      //             '${(widget.listAllDocument[index].data() as Map<String, dynamic>)["imageUrl"]}')
-                      //         .image),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Encrypted',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 30),
-                      ),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image:
+                              Image.network(widget.detail['imageUrl']).image),
                     ),
                   ),
                   Padding(

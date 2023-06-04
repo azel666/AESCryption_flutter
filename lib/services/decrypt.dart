@@ -1,48 +1,39 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class ImageDecryption {
-  Future decryptImage(String encryptedImagePath) async {
-    // Membaca data gambar terenkripsi dari Firebase Storage
-    final storageRef = FirebaseStorage.instance.ref().child(encryptedImagePath);
-    final downloadData = await storageRef.getData();
+  Future decryptedImageFile(File imageFile) async {
+    List<int> imageBytes = await imageFile.readAsBytes();
+    final key = Key.fromUtf8('15helloTCJTALK20');
+    final iv = IV.fromUtf8('HgNRbGHbDSz9T0CC');
+    final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
 
-    // Membaca kunci enkripsi
-    final key = Key.fromUtf8('alfredzich666');
-    final iv = IV.fromLength(16);
+    final encrypted = Encrypted.fromBase64(utf8.decode(imageBytes));
+    final decrypted = encrypter.decryptBytes(encrypted, iv: iv);
 
-    // Membuat objek dekripsi menggunakan AES
-    final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
-
-    // Mendekripsi data gambar
-    // final decryptedImage = encrypter.decryptBytes(Encrypted(downloadData), iv: iv);
-
-    // Menyimpan gambar terdekripsi sebagai file
-    File decryptedImageFile = File('path_to_save_decrypted_image.jpg');
-    // await decryptedImageFile.writeAsBytes(decryptedImage);
-
-    print('Decryption complete');
+    return Uint8List.fromList(decrypted);
   }
 
-  Future decryptAndUploadImage(File encryptedFile) async {
-    // Membaca data gambar sebagai byte
-    final imageBytes = await encryptedFile.readAsBytes();
+  Future decryptAndUploadImage(File imageFile) async {
+    // Membaca kunci
+    List<int> imageBytes = await imageFile.readAsBytes();
+    Uint8List uint8FileBytes = Uint8List.fromList(imageBytes);
 
-    // Membaca kunci enkripsi
-    final key = Key.fromSecureRandom(16);
+    final key = Key.fromUtf8('15helloTCJTALK20');
 
-    // final key = Key.fromUtf8('zsmLvr_YU6u6F3e1VmXl3IAbeyFkQpGhIZupAV2TL4g=');
     final iv = IV.fromLength(16);
 
     // Membuat objek dekripsi menggunakan AES
-    final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
+    final encrypter = Encrypter(AES(key, mode: AESMode.ecb));
 
     // Mendekripsi data gambar
     final decryptedImage =
-        encrypter.decryptBytes(Encrypted(imageBytes), iv: iv);
+        encrypter.decryptBytes(Encrypted(uint8FileBytes), iv: iv);
 
     // Menyimpan gambar terdekripsi sebagai file
+
     return decryptedImage;
   }
 }

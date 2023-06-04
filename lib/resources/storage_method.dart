@@ -4,10 +4,9 @@ import 'package:dio/dio.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class StorageMethod {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -35,13 +34,32 @@ class StorageMethod {
     print(dir);
 
     // Mendapatkan nama file dari URL
-    // final Uri uri = Uri.parse(imageUrl);
-    // final fileName = uri.pathSegments.last;
 
     if (imageUrl.isNotEmpty) {
       final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
       // Mendownload file ke lokasi lokal
-      final downloadsDirectory = '${dir!.path}/${imageName}.txt';
+      final downloadsDirectory = '${dir!.path}/${imageName}';
+
+      // final File file = File(downloadsDirectory);
+      // await storageRef.writeToFile(file);
+      try {
+        await Dio().download(imageUrl, downloadsDirectory);
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  //download decrypt
+  Future<void> downloadDecryptImage(String imageUrl, String imageName) async {
+    // Mendapatkan direktori unduhan lokal
+    var dir = await getExternalStorageDirectory();
+
+    // Mendapatkan nama file dari URL
+
+    if (imageUrl.isNotEmpty) {
+      // Mendownload file ke lokasi lokal
+      final downloadsDirectory = '${dir!.path}/${imageName}.jpg';
       print(downloadsDirectory);
       // final File file = File(downloadsDirectory);
       // await storageRef.writeToFile(file);
@@ -50,7 +68,6 @@ class StorageMethod {
       } catch (e) {
         print(e);
       }
-      // await GallerySaver.saveImage(downloadsDirectory, toDcim: true);
     }
   }
 
@@ -60,10 +77,5 @@ class StorageMethod {
       final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
       await storageRef.delete();
     }
-  }
-
-  void requestPermission() async {
-//permission_handler 10.2.0
-    await Permission.manageExternalStorage.request();
   }
 }

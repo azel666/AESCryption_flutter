@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sistem_kriptografi/resources/firestore_method.dart';
 import 'package:sistem_kriptografi/screens/admin_screen/admin_decrypt.dart';
 import 'package:sistem_kriptografi/screens/admin_screen/admin_encrypt.dart';
+import 'package:sistem_kriptografi/services/decrypt.dart';
 
 import 'package:sistem_kriptografi/services/encrypt.dart';
 import 'package:sistem_kriptografi/utils/my_color.dart';
@@ -116,11 +118,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  Future<void> uploadImage() async {
+  Future<void> uploadImageEncrypt() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     Reference referenceRoot = FirebaseStorage.instance.ref();
-    Reference referenceDir = referenceRoot.child('images');
+    Reference referenceDir = referenceRoot.child('images_encrypt');
     Reference referenceImageUpload = referenceDir.child(fileName);
 
     final ImagePicker _picker = ImagePicker();
@@ -128,7 +130,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     if (imageFile != null) {
       try {
         final result =
-            await ImageEncryption().encryptAndUploadImage(File(imageFile.path));
+            await ImageEncryption().encryptImageFile(File(imageFile.path));
         await referenceImageUpload.putData(result);
         imageUrl = await referenceImageUpload.getDownloadURL();
 
@@ -138,6 +140,36 @@ class _AdminDashboardState extends State<AdminDashboard> {
       } on FirebaseException catch (e) {
         print(e.message);
       }
+    }
+  }
+
+  Future<void> uploadImageDecrypt() async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+    Reference referenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDir = referenceRoot.child('images_decrypt');
+    Reference referenceImageUpload = referenceDir.child(fileName);
+
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      final filePath = result.files.first.path;
+      final fileName = result.files.first.name;
+
+      try {
+        final result = await ImageDecryption().decryptedImageFile(file);
+        await referenceImageUpload.putData(result);
+        imageUrl = await referenceImageUpload.getDownloadURL();
+
+        await FirestoreMethod().addImageDecrypt(fileName, imageUrl);
+        showAddDataSuccessDialog();
+      } on FirebaseException catch (e) {
+        print(e.message);
+      }
+    } else {
+      // User canceled the picker
+      null;
     }
   }
 
@@ -151,14 +183,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
             'pilih salah satu',
             textAlign: TextAlign.center,
           ),
-
           content: Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment
                   .center, // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: uploadImageEncrypt,
                   child: Text('Encrypt'),
                   style: ButtonStyle(
                     backgroundColor:
@@ -169,7 +200,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   width: 20,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: uploadImageDecrypt,
                   child: Text('Decrypt'),
                   style: ButtonStyle(
                     backgroundColor:
@@ -179,26 +210,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ],
             ),
           ),
-          // actions: [
-          //   ElevatedButton(
-          //     child: Text('Batal'),
-          //     onPressed: () {
-          //       Get.back();
-          //     },
-          //   ),
-          //   ElevatedButton(
-          //     child: Text('Simpan'),
-          //     onPressed: () async {
-          //       // final ref = await FirebaseFirestore.instance
-          //       //     .collection('aduan')
-          //       //     .where('image')
-          //       //     .get()
-          //       //     .then((value) => addData());
-
-          //       Get.back();
-          //     },
-          //   ),
-          // ],
         );
       },
     );
