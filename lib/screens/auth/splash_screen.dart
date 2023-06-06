@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: const Center(
         child: Text('AESCryption',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
       ),

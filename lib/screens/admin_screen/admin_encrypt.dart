@@ -23,26 +23,6 @@ class _AdminEncryptState extends State<AdminEncrypt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        // backgroundColor: "#2E4053".toColor(),
-        backgroundColor: Colors.grey,
-        title: const Text(
-          'Admin Encrypt',
-          style: TextStyle(
-            fontSize: 22,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-              onPressed: logout,
-              icon: Icon(
-                Icons.logout,
-              )),
-        ],
-      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -60,67 +40,9 @@ class _AdminEncryptState extends State<AdminEncrypt> {
             final listAllDocument = snapshot.data!.docs;
             return AdminEncryptCard(listAllDocument: listAllDocument);
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         });
-  }
-
-  void logout() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            'Logout',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: const Text(
-            'Apakah anda ingin keluar?',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF2E4053)),
-              ),
-              child: const Text(
-                'Ya',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Get.deleteAll();
-                Get.offAll(const Login());
-              },
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xFF2E4053)),
-              ),
-              child: const Text(
-                'Tidak',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

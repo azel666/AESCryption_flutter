@@ -5,13 +5,14 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sistem_kriptografi/resources/firestore_method.dart';
 
 class StorageMethod {
   final FirebaseStorage _storage = FirebaseStorage.instance;
+  String imgUrl = "";
 
-  Future<void> uploadImageToStorage(String imgUrl, XFile image) async {
+  Future<void> uploadImageToStorage(File image, String imageName) async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     Reference referenceRoot = _storage.ref();
@@ -21,6 +22,7 @@ class StorageMethod {
     try {
       await referenceImageUpload.putFile(File(image.path));
       imgUrl = await referenceImageUpload.getDownloadURL();
+      await FirestoreMethod().addImage(imageName, imgUrl);
     } on FirebaseAuthException catch (e) {
       print(e.message);
     }
@@ -60,6 +62,26 @@ class StorageMethod {
       // Mendownload file ke lokasi lokal
       final downloadsDirectory = '${dir!.path}/${imageName}.jpg';
       print(downloadsDirectory);
+      // final File file = File(downloadsDirectory);
+      // await storageRef.writeToFile(file);
+      try {
+        await Dio().download(imageUrl, downloadsDirectory);
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> downloadImageUser(String imageUrl, String imageName) async {
+    // Mendapatkan direktori unduhan lokal
+    var dir = await getExternalStorageDirectory();
+
+    // Mendapatkan nama file dari URL
+
+    if (imageUrl.isNotEmpty) {
+      // Mendownload file ke lokasi lokal
+      final downloadsDirectory = '${dir!.path}/${imageName}';
+
       // final File file = File(downloadsDirectory);
       // await storageRef.writeToFile(file);
       try {

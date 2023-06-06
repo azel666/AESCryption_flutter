@@ -40,9 +40,6 @@ class ImageEncryption {
     // Mengenkripsi data gambar
     final encryptedImage = encrypter.encryptBytes(imageBytes, iv: iv);
 
-    print(encryptedImage);
-    print(encryptedImage.bytes);
-
     // Mengunggah gambar terenkripsi ke Firebase Storage
     return encryptedImage.bytes;
   }

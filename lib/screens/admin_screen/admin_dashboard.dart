@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sistem_kriptografi/resources/firestore_method.dart';
-import 'package:sistem_kriptografi/screens/admin_screen/admin_decrypt.dart';
-import 'package:sistem_kriptografi/screens/admin_screen/admin_encrypt.dart';
+
+import 'package:sistem_kriptografi/screens/admin_screen/admin_home.dart';
+import 'package:sistem_kriptografi/screens/admin_screen/admin_tab_bar.dart';
 import 'package:sistem_kriptografi/services/decrypt.dart';
 
 import 'package:sistem_kriptografi/services/encrypt.dart';
@@ -42,8 +43,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   final List<Widget> pages = [
-    const AdminEncrypt(),
-    const AdminDecrypt(),
+    const AdminHome(),
+    const AdminTabBar(),
     // AdminTabBar(),
   ];
 
@@ -73,7 +74,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       _updated_index(0);
                     },
                     icon: Icon(
-                      Icons.lock,
+                      Icons.home,
                       color: _selected_index == 0
                           ? Colors.white
                           : "#99A3A4".toColor(),
@@ -90,7 +91,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       _updated_index(1);
                     },
                     icon: Icon(
-                      Icons.lock_open,
+                      Icons.folder,
                       color: _selected_index == 1
                           ? Colors.white
                           : "#99A3A4".toColor(),
@@ -247,7 +248,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
               ),
               onPressed: () {
-                Get.offAll(AdminDashboard());
+                Get.back();
               },
             ),
           ],

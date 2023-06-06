@@ -20,19 +20,6 @@ class _AdminDecryptState extends State<AdminDecrypt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        // backgroundColor: "#2E4053".toColor(),
-        backgroundColor: Colors.grey,
-        title: const Text(
-          'Admin Decrypt',
-          style: TextStyle(
-            fontSize: 22,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
