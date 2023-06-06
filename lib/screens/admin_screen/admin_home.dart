@@ -74,7 +74,7 @@ class _AdminHomeState extends State<AdminHome> {
         return AlertDialog(
           title: const Text(
             'Logout',
-            style: TextStyle(),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           content: const Text(
             'Apakah anda ingin keluar?',

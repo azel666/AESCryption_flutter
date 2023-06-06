@@ -86,7 +86,6 @@ class _AdminHomeDetailState extends State<AdminHomeDetail> {
                           ),
                           Text(
                             'delete',
-                            style: TextStyle(fontFamily: 'Poppins'),
                           ),
                         ],
                       )),

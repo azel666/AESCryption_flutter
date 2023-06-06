@@ -103,10 +103,10 @@ class FirestoreMethod {
   }
 
   Future<void> deleteImageUser(String imageUrl, String imageid) async {
-    final CollectionReference historyRef = _firestore.collection('images');
+    final CollectionReference imageRef = _firestore.collection('images');
 
     try {
-      await historyRef.doc(imageid).delete();
+      await imageRef.doc(imageid).delete();
 
       Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
       ref.delete();

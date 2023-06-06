@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sistem_kriptografi/screens/admin_screen/admin_decrypt_detail.dart';
+import 'package:sistem_kriptografi/screens/admin_screen/admin_home_detail.dart';
 
 class AdminHomeCard extends StatefulWidget {
   final listAllDocument;
@@ -25,7 +26,7 @@ class _AdminHomeCardState extends State<AdminHomeCard> {
               onTap: () {
                 var detail = widget.listAllDocument[index].data()
                     as Map<String, dynamic>;
-                Get.to(AdminDecryptDetail(detail: detail));
+                Get.to(AdminHomeDetail(detail: detail));
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(5, 10, 0, 10),
