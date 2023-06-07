@@ -12,7 +12,8 @@ class StorageMethod {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   String imgUrl = "";
 
-  Future<void> uploadImageToStorage(File image, String imageName) async {
+  Future uploadImageToStorage(File image, String imageName) async {
+    String res = "Some error occurred";
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     Reference referenceRoot = _storage.ref();
@@ -23,9 +24,11 @@ class StorageMethod {
       await referenceImageUpload.putFile(File(image.path));
       imgUrl = await referenceImageUpload.getDownloadURL();
       await FirestoreMethod().addImage(imageName, imgUrl);
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
+      res = "Success";
+    } on FirebaseAuthException catch (err) {
+      res = err.toString();
     }
+    return res;
   }
 
   //download encrypt
@@ -75,17 +78,22 @@ class StorageMethod {
   Future<void> downloadImageUser(String imageUrl, String imageName) async {
     // Mendapatkan direktori unduhan lokal
     var dir = await getExternalStorageDirectory();
+    Directory directory = Directory('/storage/emulated/0/Download');
 
     // Mendapatkan nama file dari URL
 
     if (imageUrl.isNotEmpty) {
       // Mendownload file ke lokasi lokal
-      final downloadsDirectory = '${dir!.path}/${imageName}';
+
+      final downloadsDirectory = '${directory.path}/${imageName}';
+      final extDirectory = '${dir!.path}/${imageName}';
 
       // final File file = File(downloadsDirectory);
       // await storageRef.writeToFile(file);
       try {
-        await Dio().download(imageUrl, downloadsDirectory);
+        await Dio().download(imageUrl, extDirectory);
+        print(downloadsDirectory);
+        print(extDirectory);
       } catch (e) {
         print(e);
       }

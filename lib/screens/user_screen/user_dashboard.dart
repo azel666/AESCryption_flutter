@@ -54,9 +54,14 @@ class _UserDashboardState extends State<UserDashboard> {
             XFile? imageFile =
                 await _picker.pickImage(source: ImageSource.gallery);
             if (imageFile != null) {
-              await StorageMethod()
+              loadingDialogUpImage();
+              final res = await StorageMethod()
                   .uploadImageToStorage(File(imageFile.path), imageFile.name);
-              showAddDataSuccessDialog();
+
+              if (res == 'Success') {
+                Navigator.of(context).pop();
+                showAddDataSuccessDialog();
+              }
             } else {
               print('error');
             }
@@ -82,6 +87,29 @@ class _UserDashboardState extends State<UserDashboard> {
             child: CircularProgressIndicator(),
           );
         });
+  }
+
+  void loadingDialogUpImage() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text(
+                "upload image...",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void showAddDataSuccessDialog() {

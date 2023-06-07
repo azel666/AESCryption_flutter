@@ -23,6 +23,7 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   String imageUrl = "";
+  bool isLoading = false;
 
   int _selected_index = 0;
 
@@ -130,14 +131,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
     XFile? imageFile = await _picker.pickImage(source: ImageSource.gallery);
     if (imageFile != null) {
       try {
+        loadingDialogEncrypt();
         final result =
             await ImageEncryption().encryptImageFile(File(imageFile.path));
         await referenceImageUpload.putData(result);
         imageUrl = await referenceImageUpload.getDownloadURL();
 
-        await FirestoreMethod()
+        final res = await FirestoreMethod()
             .addImageEncrypt(imageFile.name.toString(), imageUrl);
-        showAddDataSuccessDialog();
+
+        if (res == 'Success') {
+          Navigator.of(context).pop();
+          showAddDataSuccessDialog();
+        } else {}
       } on FirebaseException catch (e) {
         print(e.message);
       }
@@ -159,12 +165,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
       final fileName = result.files.first.name;
 
       try {
+        loadingDialogDecrypt();
         final result = await ImageDecryption().decryptedImageFile(file);
         await referenceImageUpload.putData(result);
         imageUrl = await referenceImageUpload.getDownloadURL();
 
-        await FirestoreMethod().addImageDecrypt(fileName, imageUrl);
-        showAddDataSuccessDialog();
+        final res = await FirestoreMethod().addImageDecrypt(fileName, imageUrl);
+        if (res == 'Success') {
+          Navigator.of(context).pop();
+          showAddDataSuccessDialog();
+        }
       } on FirebaseException catch (e) {
         print(e.message);
       }
@@ -172,6 +182,52 @@ class _AdminDashboardState extends State<AdminDashboard> {
       // User canceled the picker
       null;
     }
+  }
+
+  void loadingDialogEncrypt() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text(
+                "enkripsi file...",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void loadingDialogDecrypt() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text(
+                "dekripsi file...",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void choiceShow() {

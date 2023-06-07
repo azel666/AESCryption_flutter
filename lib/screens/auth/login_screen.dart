@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
                 Container(
                   padding: EdgeInsets.only(top: 20),
                   child: Text(
-                    'AESCription',
+                    'AESCryption',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
